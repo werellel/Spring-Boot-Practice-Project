@@ -1,0 +1,33 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.1' // 스프링 부트의 버전을 설정
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8' //자바 8을 사용하도록 설정
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+// 스프링 부트 프로젝트에서 사용하는 라이브버리들을 받아오는 저장소를 설정
+// 가장 기본이 되는 저장소인 메이븐 리포지터리는 mavenCentral()로 설정하기만 하면 된다.
+repositories {
+	mavenCentral()
+}
+// 프로젝트에 필요한 라이브러리 의존성을 설정하는 부분.
+// 필요한 라이브러리를 추가할 때마다 변경한다.
+dependencies {	
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
