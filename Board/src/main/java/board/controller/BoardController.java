@@ -2,6 +2,8 @@ package board.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import board.dto.BoardDto;
 import board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +47,19 @@ public class BoardController {
 		*/		
 		mv.addObject("list", list);
 		return mv;
+	}
+	// 게시글 작성 화면을 호출하는 주소	
+	@RequestMapping("/board/openBoardWrite.do")
+	public String openBoardWrite() throws Exception{
+		return "/board/boardWrite";
+	}
+	// 작성된 게시글을 등록하는 주소 <form>의 action 속성에 지정된 insertBoard.do를 확인할 수 있다.	
+	@RequestMapping(value="/board/insertBoard.do")
+	public String insertBoard(HttpServletRequest request, BoardDto board) throws Exception{
+		board.title = request.getParameter("title");
+		board.contents = request.getParameter("contents");
+		// 사용자가 작성한 게시글을 저장하는 service 영역의 메서드를 호출		
+		boardService.insertBoard(board);
+		return "redirect:/board/openBoardList.do";
 	}
 }

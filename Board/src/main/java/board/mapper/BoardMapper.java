@@ -14,4 +14,6 @@ public interface BoardMapper {
 	여기서 지정한 메서드의 이름은 잠시 후 나올 SQL의 이름과 동일해야 한다.
 	*/	
 	List<BoardDto> selectBoardList() throws Exception;
+	
+	void insertBoard(BoardDto board) throws Exception;
 }

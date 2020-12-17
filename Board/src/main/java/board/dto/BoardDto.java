@@ -1,5 +1,7 @@
 package board.dto;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import lombok.Data;
 
 /*
@@ -15,13 +17,13 @@ public class BoardDto {
 	카멜 표기법: 각 단어의 첫 글자만 대문자로 표기해 낙타 등 처럼 보이기에 이러한 명칭이 붙음
 	자바는 쿨래스 이름은 대문자로 시작하고 변수나 메서드 이름은 클래스의 이름과 구분하기 위해서 소문자로 시작
 	*/	
-	private int boardIdx;
-	private String title;
-	private String contents;
-	private int hitCnt;
-	private String creatorId;
-	private LocalDateTime createdDatetime;
-	private String updaterId;
-	private LocalDateTime updatedDatetime;
+	public int boardIdx;
+	public String title;
+	public String contents;
+	public int hitCnt;
+	public String creatorId;
+	public String createdDatetime;
+	public String updaterId;
+	public String updatedDatetime;
 	
 }
