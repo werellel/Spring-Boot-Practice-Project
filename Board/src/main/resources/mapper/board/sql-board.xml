@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 매퍼의 네임스페이스를 지정. 매퍼와 XML의 쿼리를 매칭해서 사용하려면 매퍼 인터페이스의 경로와 메서드의
+이름과 쿼리의 이름이 같아야 한다. 네임스페이스에서 공통적으로 사용되는 경로를 지정해서 네임스페이스와 쿼리 아이디가
+합쳐져서 호출되게끔 한다. -->
+<mapper namespace="board.mapper.BoardMapper">
+	<!-- select 태그를 이요하여 select 쿼리임을 나타낸다. id는 해당 쿼리의 아이디를 지정한다.
+	resultType은 이 쿼리의 실행 결과가 앞에서 만든 DTO인 BoardDto 형식으로 반환되는 것을 의미한다. -->
+	<select id="selectBoardList" resultType="board.dto.BoardDto">
+		<![CDATA[
+			SELECT
+				board_idx,
+				title,
+				hit_cnt,
+				DATE_FORMAT(created_datetime, '%Y.%m.%d %H:%i:%s') AS created_datetime
+			FROM
+				t_board
+			WHERE
+				deleted_yn = 'N'
+			ORDER BY board_idx DESC
+		]]>
+	</select>
+	<!-- 
+	<insert id="insertBoard" parameterType="board.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">
+		<![CDATA[
+			INSERT INTO t_board
+			(
+				title, 
+				contents, 
+				created_datetime, 
+				creator_id
+			) 
+			VALUES 
+			(
+				#{title}, 
+				#{contents}, 
+				NOW(), 
+				'admin'			
+			)
+		]]>
+	</insert>
+	
+	<select id="selectBoardDetail" parameterType="int" resultType="board.dto.BoardDto">
+		<![CDATA[
+			SELECT
+				board_idx,
+				title,
+				contents,
+				hit_cnt,
+				DATE_FORMAT(created_datetime, '%Y.%m.%d %H:%i:%s') AS created_datetime,
+				creator_id
+			FROM
+				t_board
+			WHERE
+				board_idx = #{boardIdx}
+				AND deleted_yn = 'N'
+		]]>
+	</select>
+	
+	<update id="updateHitCount" parameterType="int">
+		<![CDATA[
+			UPDATE 
+				t_board 
+			SET 
+				hit_cnt = hit_cnt + 1 
+			WHERE 
+				board_idx = #{boardIdx}
+		]]>
+	</update>
+	
+	<update id="updateBoard" parameterType="board.dto.BoardDto">
+		<![CDATA[
+			UPDATE t_board SET 
+				title = #{title},
+				contents = #{contents},
+				updated_datetime = Now(),
+				updater_id = 'admin'
+			WHERE 
+				board_idx = #{boardIdx}
+		]]>
+	</update>
+	
+	<update id="deleteBoard" parameterType="int">
+		<![CDATA[
+			UPDATE t_board SET 
+				deleted_yn = 'Y',
+				updated_datetime = Now(),
+				updater_id = 'admin'
+			WHERE 
+				board_idx = #{boardIdx}
+		]]>
+	</update> -->
+</mapper>
