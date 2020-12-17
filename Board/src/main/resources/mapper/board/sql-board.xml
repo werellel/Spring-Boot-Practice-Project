@@ -39,7 +39,6 @@
 			)
 		]]>
 	</insert>
-	<!-- 
 	
 	<select id="selectBoardDetail" parameterType="int" resultType="board.dto.BoardDto">
 		<![CDATA[
@@ -68,6 +67,7 @@
 				board_idx = #{boardIdx}
 		]]>
 	</update>
+	<!-- 
 	
 	<update id="updateBoard" parameterType="board.dto.BoardDto">
 		<![CDATA[

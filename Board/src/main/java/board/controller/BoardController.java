@@ -9,6 +9,7 @@ import board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /*
@@ -61,5 +62,14 @@ public class BoardController {
 		// 사용자가 작성한 게시글을 저장하는 service 영역의 메서드를 호출		
 		boardService.insertBoard(board);
 		return "redirect:/board/openBoardList.do";
+	}
+	
+	@RequestMapping("/board/openBoardDetail.do")
+	public ModelAndView openBoardDetail(@RequestParam int boardIdx) throws Exception{
+		ModelAndView mv = new ModelAndView("/board/boardDetail");
+		
+		BoardDto board = boardService.selectBoardDetail(boardIdx);
+		mv.addObject("board", board);
+		return mv;
 	}
 }
