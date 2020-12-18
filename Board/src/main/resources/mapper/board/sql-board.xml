@@ -67,7 +67,6 @@
 				board_idx = #{boardIdx}
 		]]>
 	</update>
-	<!-- 
 	
 	<update id="updateBoard" parameterType="board.dto.BoardDto">
 		<![CDATA[
@@ -90,5 +89,5 @@
 			WHERE 
 				board_idx = #{boardIdx}
 		]]>
-	</update> -->
+	</update>
 </mapper>
