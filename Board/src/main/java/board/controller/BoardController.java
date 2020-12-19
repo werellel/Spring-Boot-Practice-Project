@@ -1,11 +1,22 @@
 package board.controller;
 
+/* 
+로그를 사용하는 코드에서는 특정 로깅 구현체의 패키지를 사용하지 않는다.
+코드에서 사용되는 로거는 slf4j 패키지이다. 
+로거로 Logback을 사용하더라도 코드 내에서는 slf4j의 의존성만 사용한다. 
+그렇기 때문에 Logback이 아닌 다른 라이브러리 log4j와 같은 것으로 쉽게 변경할 수 있다.
+Logback은 의존성이 없기 때문에 코드 내에서 추가적으로 변경할 부분이 없다.
+*/
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import board.dto.BoardDto;
 import board.service.BoardService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +28,7 @@ MVC의 컨트롤러를 의미합니다. Controller 어노테이션을 붙여줌�
 */
 @Controller
 public class BoardController {
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	/*
 	비즈니스 로직을 처리하는 서비스 빈을 연결.
 	*/	
@@ -31,6 +43,7 @@ public class BoardController {
 	*/	
 	@RequestMapping("/board/openBoardList.do")
 	public ModelAndView openBoardList() throws Exception{
+		log.debug("openBoardList");
 		/*
 		호출된 요청의 결과를 보여 줄 뷰를 지정 
 		templates 폴더 아래에 있는 board/boardList.html을 의미
