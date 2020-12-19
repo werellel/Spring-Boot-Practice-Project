@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import board.dto.BoardDto;
-
 // 마이바티스 매퍼 인터페이스임을 선언
 @Mapper
 public interface BoardMapper {
