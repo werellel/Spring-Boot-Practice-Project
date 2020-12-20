@@ -10,6 +10,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -20,6 +23,7 @@ application.properties를 사용할 수 있도록 설정 파일의 위치를 지
 @PropertySourc 어노테이션을 추가해서 다른 설정 파일도 사용할 수 있다.
  */
 @PropertySource("classpath:/application.properties")
+@EnableTransactionManagement  // 스프링에서 제공하는 어노테이션 기반 트랜잭션을 활성화한다.
 public class DatabaseConfiguration {
 	
 	@Autowired
@@ -76,5 +80,11 @@ public class DatabaseConfiguration {
 	@ConfigurationProperties(prefix="mybatis.configuration") // 마이바티스 관련된 설정을 가져온다. 
 	public org.apache.ibatis.session.Configuration mybatisConfig() {
 		return new org.apache.ibatis.session.Configuration(); // 가져온 마이바티스 설정을 바자 클래스로 만들어 변환
+	}
+	
+	/* 스프링이 제공하는 트랜잭션 매니저를 등록한다. */	
+	@Bean
+	public PlatformTransactionManager transactionManager() throws Exception {
+		return new DataSourceTransactionManager(dataSource());
 	}
 }

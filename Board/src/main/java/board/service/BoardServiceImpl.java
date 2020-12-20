@@ -8,6 +8,7 @@ import board.mapper.BoardMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 MVC의 서비스임을 나타낸다. 
 */
 @Service
+@Transactional // 인터페이스나 클래스, 메서드에 사용할 수 있습니다. 어노테이션이 적용된 대상은 설정된 트랜잭션 빈에 의해서 트랜잭션 처리된다.
 public class BoardServiceImpl implements BoardService{
 	/*
 	데이터베이스에 접근하는 DAO 빈을 선언합니다. 
