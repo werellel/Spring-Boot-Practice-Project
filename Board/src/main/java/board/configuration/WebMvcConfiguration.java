@@ -9,6 +9,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import board.interceptor.LoggerInterceptor;
 
@@ -49,5 +50,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer{
 	@Bean
 	public HttpMessageConverter<String> responseBodyConverter(){
 		return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+	}
+	
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+		commonsMultipartResolver.setDefaultEncoding("UTF-8"); // 파일의 인코딩을 UTF-8로 설정
+		commonsMultipartResolver.setMaxUploadSizePerFile(5*1024*1024); // 업로드되는 파일의 크기 제한(바이트 단위 설정 가능) 5mb로 제한
+		return commonsMultipartResolver;
 	}
 }
