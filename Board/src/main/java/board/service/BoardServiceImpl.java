@@ -3,13 +3,20 @@ BoardServiceImpl 클래스는 BoardService 인터페이스를 사용하여 실�
 */
 package board.service;
 
+import board.common.FileUtils;
 import board.dto.BoardDto;
+import board.dto.BoardFileDto;
 import board.mapper.BoardMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.util.Iterator;
 import java.util.List;
 
 /*
@@ -25,6 +32,9 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired
 	private BoardMapper boardMapper;
 	
+	@Autowired
+	private FileUtils fileUtils;
+	
 	/*
 	사용자 요청을 처리하기 위한 비즈니스 로직을 구 
 	*/	
@@ -34,9 +44,12 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public void insertBoard(BoardDto board) throws Exception {
-		System.out.println("board.title: " + board.title);
+	public void insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
 		boardMapper.insertBoard(board);
+		List<BoardFileDto> list = fileUtils.parseFileInfo(board.getBoardIdx(), multipartHttpServletRequest);
+		if(CollectionUtils.isEmpty(list) == false){
+			boardMapper.insertBoardFileList(list);
+		}
 	}
 	
 	@Override

@@ -18,9 +18,11 @@ import board.dto.BoardDto;
 import board.service.BoardService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 /*
@@ -68,14 +70,14 @@ public class BoardController {
 		return "/board/boardWrite";
 	}
 	// 작성된 게시글을 등록하는 주소 <form>의 action 속성에 지정된 insertBoard.do를 확인할 수 있다.	
-	@RequestMapping(value="/board/insertBoard.do")
-	public String insertBoard(HttpServletRequest request, BoardDto board) throws Exception{
-		board.title = request.getParameter("title");
-		board.contents = request.getParameter("contents");
-		// 사용자가 작성한 게시글을 저장하는 service 영역의 메서드를 호출		
-		boardService.insertBoard(board);
-		return "redirect:/board/openBoardList.do";
-	}
+//	@RequestMapping(value="/board/insertBoard.do")
+//	public String insertBoard(HttpServletRequest request, BoardDto board) throws Exception{
+//		board.title = request.getParameter("title");
+//		board.contents = request.getParameter("contents");
+//		// 사용자가 작성한 게시글을 저장하는 service 영역의 메서드를 호출		
+//		boardService.insertBoard(board);
+//		return "redirect:/board/openBoardList.do";
+//	}
 	
 	@RequestMapping("/board/openBoardDetail.do")
 	public ModelAndView openBoardDetail(@RequestParam int boardIdx) throws Exception{
@@ -96,5 +98,11 @@ public class BoardController {
 	public String deleteBoard(int boardIdx) throws Exception{
 		boardService.deleteBoard(boardIdx);
 		return "redirect:/board/openBoardList.do";		
+	}
+	
+	@RequestMapping("/board/insertBoard.do")
+	public String insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+		boardService.insertBoard(board, multipartHttpServletRequest);
+		return "redirect:/board/openBoardList.do";
 	}
 }

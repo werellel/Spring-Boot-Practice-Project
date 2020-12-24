@@ -6,10 +6,12 @@ package board.service;
 import board.dto.BoardDto;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 public interface BoardService {
 	List<BoardDto> selectBoardList() throws Exception;
 	
-	void insertBoard(BoardDto board) throws Exception;
+	void insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception;
 	
 	BoardDto selectBoardDetail(int boardIdx) throws Exception;
 	

@@ -21,6 +21,10 @@
 			ORDER BY board_idx DESC
 		]]>
 	</select>
+	<!-- 게시글을 작성할 때 등록된 게시글 번호를 받아오는 방법을 쿼리를 변경하면서 다룬다. useGeneratedKeys와 keyProperty 속성에 해당한다.
+	useGeneratedKeys 속성은 DBMS가 자동 생성키(오토인크레먼트)를 지원할 경우에 사용할 수 있다. keyProperty는 useGeneratedKeys나 selectKey
+	의 하위 엘리먼트에 의해 리턴되는 키를 의미한다. 게시글의 경우 board_idx 컬럼이 PK이면서 자동 생성이 된다.  
+	 -->
 	<insert id="insertBoard" parameterType="board.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx">
 		<![CDATA[
 			INSERT INTO t_board
@@ -90,4 +94,34 @@
 				board_idx = #{boardIdx}
 		]]>
 	</update>
+	
+	<insert id="insertBoardFileList" parameterType="board.dto.BoardFileDto">
+		<![CDATA[
+			INSERT INTO t_file
+			(
+				board_idx,
+				original_file_name,
+				stored_file_path,
+				file_size,
+				creator_id,
+				created_datetime
+			)
+			VALUES
+		]]>
+		<!-- 파일 목록은 하나 이상이기 때문에 마이바티스의 foreach 문을 사용해서 collection의 반복 처리를 한다.
+		collcection 속성은 전달받은 인자를 의미하며 List나 Array 형식의 데이터를 사용한다. item 속성은 전달받은
+		인자의 별칭이다. 이 별칭을 통해 컬렉션 데이터에 접근한다. insert의 values 값을 구분하는데 seperator가 사용된다.
+		
+		 -->
+		<foreach collection="list" item="item" separator=",">
+			(
+				#{item.boardIdx},
+				#{item.originalFileName},
+				#{item.storedFilePath},
+				#{item.fileSize},
+				'admin',
+				NOW()
+			)
+		</foreach>
+	</insert>
 </mapper>
