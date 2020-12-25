@@ -1,5 +1,6 @@
 package board.controller;
 
+import org.apache.commons.io.FileUtils;
 /* 
 로그를 사용하는 코드에서는 특정 로깅 구현체의 패키지를 사용하지 않는다.
 코드에서 사용되는 로거는 slf4j 패키지이다. 
@@ -10,21 +11,25 @@ Logback은 의존성이 없기 때문에 코드 내에서 추가적으로 변경
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import board.dto.BoardDto;
+import board.dto.BoardFileDto;
 import board.service.BoardService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
+import java.net.URLEncoder;
 /*
 MVC의 컨트롤러를 의미합니다. Controller 어노테이션을 붙여줌으로써 해당 클래스를 컨트롤러로 동작하게 한다.
 */
@@ -104,5 +109,43 @@ public class BoardController {
 	public String insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
 		boardService.insertBoard(board, multipartHttpServletRequest);
 		return "redirect:/board/openBoardList.do";
+	}
+	
+	@RequestMapping("/board/downloadBoardFile.do")
+	/*
+	HttpServletResponse 객체를 파라미터로 사용한다. 사용자에게 전달할 데이터를 담고 있다.
+	사용자에 전달할 결괏값을 원하는 대로 만들거나 변경할 수 있다. 
+	*/	
+	public void downloadBoardFile(@RequestParam int idx, @RequestParam int boardIdx, HttpServletResponse response) throws Exception{
+		/*
+		데이터베이스에서 선택된 파일의 정보를 조회한다. 
+		*/		
+		BoardFileDto boardFile = boardService.selectBoardFileInformation(idx, boardIdx);
+		if(ObjectUtils.isEmpty(boardFile) == false) {
+			String fileName = boardFile.getOriginalFileName();
+			/*
+			실제로 저장되어 있는 파일을 읽어온 후 바이트 형태로 변환한다.  
+			*/			
+			byte[] files = FileUtils.readFileToByteArray(new File(boardFile.getStoredFilePath()));
+			
+			/*
+			response의 헤더에 콘텐츠 타입, 크기 및 형태 등을 설정한다. 파일의 이름은 반드시 UTF-8로 인코딩을 한다. 
+			*/			
+			response.setContentType("application/octet-stream");
+			response.setContentLength(files.length);
+			response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(fileName,"UTF-8")+"\";");
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			/*
+			앞에서 읽어온 파일 정보의 바이트 배열 데이터를 response에 작성한다. 
+			*/			
+			response.getOutputStream().write(files);
+			
+			/*
+			마지막으로 response의 버퍼를 정리하고 닫아준다. 
+			*/			
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		}
 	}
 }

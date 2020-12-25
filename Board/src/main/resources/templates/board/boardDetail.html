@@ -43,7 +43,13 @@
 			</table>
 			<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx }">
 		</form>
-		
+		<div class="file_list">
+			<!-- 
+			게시글 목록을 표시할 때와 마찬가지로 th:each를 이용해서 받아온 첨부파일 목록을 표시한다.
+			Thymeleaf에서는 | 기호를 사용하여 변수와 고정된 문자열을 혼합하여 출력할 수 있다.
+			 -->
+			<a th:each="list : ${board.fileList}" th:href="@{/board/downloadBoardFile.do(idx=${list.idx}, boardIdx=${list.boardIdx})}" th:text="|${list.originalFileName} (${list.fileSize} kb)|"></a>
+		</div>
 		<a href="#this" id="list" class="btn">목록으로</a>
 		<a href="#this" id="edit" class="btn">수정하기</a>
 		<a href="#this" id="delete" class="btn">삭제하기</a>

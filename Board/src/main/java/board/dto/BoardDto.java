@@ -1,6 +1,7 @@
 package board.dto;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import lombok.Data;
 
@@ -25,5 +26,6 @@ public class BoardDto {
 	public String createdDatetime;
 	public String updaterId;
 	public String updatedDatetime;
+	public List<BoardFileDto> fileList;
 	
 }

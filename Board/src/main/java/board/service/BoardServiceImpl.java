@@ -54,9 +54,19 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Override
 	public BoardDto selectBoardDetail(int boardIdx) throws Exception {
+		/*
+		게시글의 조회수를 증가시킨다. 
+		*/		
 		boardMapper.updateHitCount(boardIdx);
-		
+		/*
+		게시글의 내용을 조회한다.
+		*/		
 		BoardDto board = boardMapper.selectBoardDetail(boardIdx);
+		/*
+		게시글 번호로 게시글의 첨부파일 목록 조회하고 게시글의 정보를 담고있는 BoardDto 클래스에 조회된 첨부파일 목록을 저장한다..
+		*/		
+		List<BoardFileDto> fileList = boardMapper.selectBoardFileList(boardIdx);
+		board.setFileList(fileList);
 		
 		return board;
 	}
@@ -69,5 +79,10 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void deleteBoard(int boardIdx) throws Exception{
 		boardMapper.deleteBoard(boardIdx);
+	}
+	
+	@Override
+	public BoardFileDto selectBoardFileInformation(int idx, int boardIdx) throws Exception {
+		return boardMapper.selectBoardFileInformation(idx, boardIdx);
 	}
 }
