@@ -31,6 +31,9 @@ public class RestBoardController {
 	*/	
 	@RequestMapping(value="/board", method=RequestMethod.GET)
 	public ModelAndView openBoardList() throws Exception{
+		/*
+	 	RESTful 게시판을 위해서 컨트롤러를 만든 것처럼 뷰 템플릿도 새로 만든다.
+		 */		
 		ModelAndView mv = new ModelAndView("/board/restBoardList");
 		
 		List<BoardDto> list = boardService.selectBoardList();
@@ -38,7 +41,10 @@ public class RestBoardController {
 		
 		return mv;
 	}
-	
+	/*
+	각각 게시글 작성 화면 호출과 게시글 작성을 의미한다. 화면 호출과 게시글을 작성하는 주소는 똑같고
+	요청 방식이 GET과 POST로 다른 것을 확인할 수 있다. 
+	*/	
 	@RequestMapping(value="/board/write", method=RequestMethod.GET)
 	public String openBoardWrite() throws Exception{
 		return "/board/restBoardWrite";
@@ -63,13 +69,13 @@ public class RestBoardController {
 		return mv;
 	}
 	
-	@RequestMapping(value="/board/{boardIdx}", method=RequestMethod.PUT)
+	@RequestMapping(value="/board/{boardIdx}", method={RequestMethod.POST})
 	public String updateBoard(BoardDto board) throws Exception{
 		boardService.updateBoard(board);
 		return "redirect:/board";
 	}
 	
-	@RequestMapping(value="/board/{boardIdx}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/board/{boardIdx}", method={RequestMethod.DELETE})
 	public String deleteBoard(@PathVariable("boardIdx") int boardIdx) throws Exception{
 		boardService.deleteBoard(boardIdx);
 		return "redirect:/board";

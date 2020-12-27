@@ -8,6 +8,8 @@
 <body>
 	<div class="container">
 		<h2>게시글 상세 화면</h2>
+		<!-- 폼의 메서드는 POST로 설정한다. 폼은 POST로 동작하지만 서버에서는 _method 파라미터
+		로 요청 방식을 결정한다. -->
 	    <form id="frm" method="post">
 	    	<table class="board_detail">
 				<colgroup>
@@ -42,7 +44,14 @@
 				</tbody>
 			</table>
 			<input type="hidden" id="boardIdx" name="boardIdx" th:value="${board.boardIdx }">
-			<!-- 여기 -->
+			<!-- HTML은 POST와 GET 방식의 요청만 지원하고, PUT, DELETE 방식은 지원하지 않는다.
+			스프링은 웹 브라우저에서 사용되는 POST, GET 방식을 이용해서 PUT DELETE 방식을 사용할 
+			수 있는 기능을 지원한다. HiddenHttpMethodFilter에 해당한다. 이 필터는 스프링 부트
+			2.0 버전에서는 직접 빈으로 등록해야 하나 2.1.x에는 이미 등록되어 있다. 별도로 설정을
+			추가하지 않아도 된다.
+			HiddenHttpMethodFilter는 _method라는 이름의 파라미터가 존재할 경우 그 값을
+			요청 방식으로 사용한다. _method의 값을 PUT으로 보내면 컨트롤러에서 RequestMethod.PUT
+			값을 가진 URI가 호출된다. 화면에 보이지 않는 _method라는 이름의 입력창을 추가한다. -->
 			<input type="hidden" id="method" name="_method"/>
 		</form>
 		
@@ -59,16 +68,20 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			/* 여기 */
+			/* 컨트롤러에서 파일을 다운받는 URI는 board/file로 지정했고, 파일을 조회하기 위해서
+			파일 번호와 게시글 번호가 필요하다. Thymeleaf에 여러 개의 파라미터를 전달하려면 
+			(키=값, 키=) 형식으로 데이터를 전달해야 한다. 여기서 선택된 파일 번호와 게시글 번호를 
+			각각 idx와 boardIdx라는 이름으로 전달한다. 추후 브라우저에서는 전달된 파라미터가
+			/board/file?idx=파일번호&boardIdx=게시글번호 형식으로 변환된다.*/
 			var boardIdx = $("#boardIdx").val();
 			
 			$("#list").on("click", function(){
-				/* 여기 */
 				location.href = "/board/";
 			});
 			
 			$("#edit").on("click", function(){
-				/* 여기 */
+				/* HiddenHttpMethodFilter를 등록하면 _method 파라미터로
+				요청 방식을 선택할 수 있다. put을 설정*/
 				$("#method").val("put");
 				
 				var frm = $("#frm")[0];
@@ -77,7 +90,8 @@
 			});
 			
 			$("#delete").on("click", function(){
-				/* 여기 */
+				/* HiddenHttpMethodFilter를 등록하면 _method 파라미터로
+				요청 방식을 선택할 수 있다. delete을 설정*/
 				$("#method").val("delete");
 				
 				var frm = $("#frm")[0];
