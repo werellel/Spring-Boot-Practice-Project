@@ -1,6 +1,8 @@
 package board.configuration;
 import javax.sql.DataSource;
 
+import java.util.Properties;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -86,5 +88,10 @@ public class DatabaseConfiguration {
 	@Bean
 	public PlatformTransactionManager transactionManager() throws Exception {
 		return new DataSourceTransactionManager(dataSource());
+	}
+	
+	@ConfigurationProperties(prefix="spring.jpa")
+	public Properties hibernateConfig() {
+		return new Properties();
 	}
 }
