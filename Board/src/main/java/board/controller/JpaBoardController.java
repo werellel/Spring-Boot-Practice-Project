@@ -43,6 +43,9 @@ public class JpaBoardController {
 	
 	@RequestMapping(value="/jpa/board/write", method=RequestMethod.POST)
 	public String writeBoard(BoardEntity board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception{
+		/* 게시글을 작성할 떄와 수정할 떄 모두 동일한 서비스 메서드를 호출한다. JPA
+		의 save 메서드는 insert와 update 두 가지 역할을 모두 수행한다.
+		*/
 		jpaBoardService.saveBoard(board, multipartHttpServletRequest);
 		return "redirect:/jpa/board";
 	}

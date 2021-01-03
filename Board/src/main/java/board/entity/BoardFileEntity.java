@@ -13,6 +13,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+/*
+t_jpa_file 테이블을 매핑하도록 나타낸다.
+*/
 @Table(name="t_jpa_file")
 @NoArgsConstructor
 @Data
